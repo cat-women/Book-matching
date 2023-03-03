@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import postRouter from './routes/posts.js'
 import user from './routes/user.js'
 import books from './routes/books.js'
+import userProfile from './routes/userProfile.js'
 
 const app = express()
 dotenv.config()
@@ -18,6 +19,7 @@ app.use(cors())
 app.use('/posts', postRouter)
 app.use('/users', user)
 app.use('/books', books)
+app.use('/userProfile', userProfile)
 
 // Mongodb Connection
 
