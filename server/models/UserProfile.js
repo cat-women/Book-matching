@@ -8,9 +8,10 @@ const profileSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    behaviour: {
-      type: Object
-    }
+    keywords: {
+      type: [String]
+    },
+    likes: { type: Array, default:[] }
   },
 
   {

@@ -11,11 +11,9 @@ const bookSchema = mongoose.Schema(
       maxlength: 255,
       unique: true
     },
-    owner: {
+    ownerId: {
       type: String,
       required: true,
-      minlength: 2,
-      maxlength: 255
     },
     author: {
       type: String,

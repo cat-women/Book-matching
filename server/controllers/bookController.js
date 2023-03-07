@@ -4,29 +4,13 @@ import jwt from 'jsonwebtoken'
 import Book from '../models/Book.js'
 
 export const addBook = async (req, res, next) => {
-  const {
-    title,
-    owner,
-    author,
-    category,
-    discription,
-    keywords,
-    image
-  } = req.body
+  const book = req.body
   try {
-    const oldBook = await Book.findOne({ title, author })
+    const oldBook = await Book.findOne({title: book.title,author: book.author })
     if (oldBook)
       return res.status(400).json({ msg: 'This book already exits ' })
 
-    const result = await Book.create({
-      title: title,
-      owner: owner,
-      author: author,
-      category: category,
-      discription: discription,
-      keywords: keywords,
-      image: image
-    })
+    const result = await Book.create(book)
 
     return res.status(200).json(result)
 
