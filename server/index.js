@@ -4,10 +4,12 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 
+import ErrorHandler from './middleware/errorHandler.js'
 import postRouter from './routes/posts.js'
 import user from './routes/user.js'
 import books from './routes/books.js'
 import userProfile from './routes/userProfile.js'
+import matchBook from './routes/matchBook.js'
 
 const app = express()
 dotenv.config()
@@ -20,8 +22,10 @@ app.use('/posts', postRouter)
 app.use('/users', user)
 app.use('/books', books)
 app.use('/userProfile', userProfile)
+app.use('/matchBook', matchBook)
 
-// Mongodb Connection
+// erro handler
+app.use(ErrorHandler);
 
 const PORT = process.env.PORT || 8000
 
@@ -35,4 +39,3 @@ mongoose
   )
   .catch(err => console.log(err.message))
 
-// mongoose.set('useFindAndModofy', false)

@@ -13,7 +13,7 @@ const bookSchema = mongoose.Schema(
     },
     ownerId: {
       type: String,
-      required: true,
+      required: true
     },
     author: {
       type: String,
@@ -37,6 +37,10 @@ const bookSchema = mongoose.Schema(
     },
     keywords: {
       type: [String]
+    },
+    availbility: {
+      type: Boolean,
+      default: 1
     }
   },
   {

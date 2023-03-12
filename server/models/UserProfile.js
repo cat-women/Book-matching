@@ -11,7 +11,8 @@ const profileSchema = mongoose.Schema(
     keywords: {
       type: [String]
     },
-    likes: { type: Array, default:[] }
+    likes: { type: Array, default: [] },
+    decision: { type: Array, default :[] }
   },
 
   {

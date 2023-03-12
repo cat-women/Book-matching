@@ -1,6 +1,3 @@
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-
 import Book from '../models/Book.js'
 
 export const addBook = async (req, res, next) => {
