@@ -10,6 +10,7 @@ import user from './routes/user.js'
 import books from './routes/books.js'
 import userProfile from './routes/userProfile.js'
 import matchBook from './routes/matchBook.js'
+import bookRecommend from './services/recomendBook.js'
 
 const app = express()
 dotenv.config()
@@ -18,6 +19,7 @@ app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(cors())
 
+
 app.use('/posts', postRouter)
 app.use('/users', user)
 app.use('/books', books)
@@ -25,7 +27,7 @@ app.use('/userProfile', userProfile)
 app.use('/matchBook', matchBook)
 
 // erro handler
-app.use(ErrorHandler);
+app.use(ErrorHandler)
 
 const PORT = process.env.PORT || 8000
 
@@ -38,4 +40,3 @@ mongoose
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
   )
   .catch(err => console.log(err.message))
-

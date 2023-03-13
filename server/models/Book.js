@@ -36,7 +36,7 @@ const bookSchema = mongoose.Schema(
       type: String
     },
     keywords: {
-      type: [String]
+      type: String
     },
     availbility: {
       type: Boolean,

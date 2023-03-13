@@ -2,13 +2,14 @@ import mongoose from 'mongoose'
 import Book from './Book.js'
 import User from './User.js'
 
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema
 
 const matchedBookSchema = mongoose.Schema(
   {
     id: { type: String },
     claimantID: {
-      type: String,
+      type: Schema.ObjectId,
+      ref: User,
       required: true
     },
     ownerId: {

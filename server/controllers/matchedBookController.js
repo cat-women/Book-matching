@@ -1,3 +1,5 @@
+import mongoose from 'mongoose'
+
 import MatchedBook from '../models/MatchedBook.js'
 import Book from '../models/Book.js'
 import User from '../models/User.js'
@@ -23,13 +25,26 @@ export const addMatch = async (req, res, next) => {
     next(error)
   }
 }
-export const getRequestedMatch = (req, res, next) => {
-  const id = req.params.id
+// woner : request for book
+export const getRequestedMatch = async (req, res, next) => {
+  var id = mongoose.Types.ObjectId(req.params.id)
+
   MatchedBook.aggregate([
     {
       $match: {
         ownerId: id
       }
+    },
+    {
+      $lookup: {
+        from: Book.collection.name,
+        localField: 'bookId',
+        foreignField: '_id',
+        as: 'book'
+      }
+    },
+    {
+      $unwind: '$book'
     },
     {
       $lookup: {
@@ -39,20 +54,17 @@ export const getRequestedMatch = (req, res, next) => {
         as: 'user'
       }
     },
-    { $unwind: '$user' },
     {
-      $lookup: {
-        from: Book.ser.collection.name,
-        localField: 'bookId',
-        foreignField: '_id',
-        as: 'book'
-      }
+      $unwind: '$user'
     },
-    { $unwind: '$book' },
     {
       $project: {
-        _id: 0,
+        _id: 1,
         bookTitle: '$book.title',
+        bookAuthor: '$book.author',
+        bookDiscription: '$book.discription',
+        bookCover: '$book.image',
+
         userName: '$user.name'
       }
     }
@@ -70,7 +82,7 @@ export const getRequestedMatch = (req, res, next) => {
 }
 
 export const getMatch = (req, res, next) => {
-  const id = req.params.id
+  var id = mongoose.Types.ObjectId(req.params.id)
 
   MatchedBook.aggregate([
     {
@@ -105,8 +117,11 @@ export const getMatch = (req, res, next) => {
       //  $project stage to select the book.title and user.name fields and rename them to bookTitle and userName, respectively.
 
       $project: {
-        _id: 0,
+        _id: 1,
         bookTitle: '$book.title',
+        bookAuthor: '$book.author',
+        bookDiscription: '$book.discription',
+        bookCover: '$book.image',
         userName: '$user.name'
       }
     }
@@ -117,7 +132,6 @@ export const getMatch = (req, res, next) => {
     } else {
       if (!results)
         res.status(404).json({ message: 'This matched does not exit' })
-
       res.status(200).json(results)
     }
   })
