@@ -1,10 +1,37 @@
 import React, { useState } from 'react';
 import { Button, Form, Container } from 'react-bootstrap';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAsync, signupAsync } from '../../features/services/auth';
+
 import './style.css'
-const AuthForm = ({ classes, handleSubmit, handleChange, handleShowPassword, switchMode }) => {
+const AuthForm = ({ }) => {
      const [showPassword, setShowPassword] = useState(false);
      const [isSignUp, setIsSignUp] = useState(true);
+     const [formData, setformData] = useState({})
+     const dispatch = useDispatch();
+     const auth = useSelector((state) => state.auth);
 
+
+     const handleShowPassword = () => {
+          setShowPassword(prevShowPassword => !prevShowPassword)
+     }
+
+     const handleChange = e => {
+          setformData({ ...formData, [e.target.name]: e.target.value })
+     }
+
+     const handleSubmit = (e) => {
+          e.preventDefault()
+
+          if (isSignUp) {
+               dispatch(signupAsync(formData));
+               setIsSignUp(false)
+               return
+          }
+          dispatch(loginAsync(formData));
+          return
+     };
 
      return (
           <div className={`container`}>
@@ -85,7 +112,7 @@ const AuthForm = ({ classes, handleSubmit, handleChange, handleShowPassword, swi
                     >
                          {isSignUp ? 'Sign up' : 'Sign in'}
                     </Button>
-                    <Button onClick={switchMode}>
+                    <Button onClick={() => setIsSignUp(!isSignUp)}>
                          {isSignUp
                               ? 'Already have an account? Sign in'
                               : "Don't have an account? Sign up"}
