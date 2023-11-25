@@ -7,8 +7,8 @@ export const loginAsync = createAsyncThunk('auth/login', async (data, thunkAPI) 
      try {
           const response = await axios.post('users/signin', data);
           sessionStorage.setItem('user', JSON.stringify(response.data));
-
           return response.data;
+          
      } catch (error) {
           console.log("login error", error)
           thunkAPI.rejectWithValue(error)

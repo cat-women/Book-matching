@@ -6,20 +6,29 @@ import User from '../models/User.js'
 import UserProfile from '../models/UserProfile.js'
 
 export const addMatch = async (req, res, next) => {
-  const newMatch = req.body
+  const bookId = req.params.id
+
   try {
-    const book = await Book.findById(newMatch.bookId)
-    if (!book) res.status(404).json({ message: 'Book does not exist' })
+    const book = await Book.findById(bookId)
+
+    if (!book) return res.status(404).json({ message: 'Book does not exist' })
 
     // check if match already place
     const oldBook = await MatchedBook.findOne({
-      bookId: newMatch.bookId,
-      claimantID: newMatch.claimantID
+      bookId: bookId,
+      claimantID: req.user.id
     })
-    if (oldBook) res.status(400).json({ message: 'Match request already send' })
 
-    const result = await MatchedBook.create(newMatch)
-    res.status(200).json(result)
+
+    if (oldBook) return res.status(400).json({ message: 'Match request already send' })
+
+    const result = await MatchedBook.create({
+      claimantID: mongoose.Types.ObjectId(req.user.id),
+      bookId: book._id,
+      ownerId: book.ownerId
+    })
+
+    return res.status(200).json(result)
   } catch (error) {
     console.log('error', error)
     next(error)
@@ -27,12 +36,11 @@ export const addMatch = async (req, res, next) => {
 }
 // woner : request for book
 export const getRequestedMatch = async (req, res, next) => {
-  var id = mongoose.Types.ObjectId(req.params.id)
 
   MatchedBook.aggregate([
     {
       $match: {
-        ownerId: id
+        ownerId: mongoose.Types.ObjectId(req.user?.id)
       }
     },
     {
@@ -60,12 +68,11 @@ export const getRequestedMatch = async (req, res, next) => {
     {
       $project: {
         _id: 1,
-        bookTitle: '$book.title',
-        bookAuthor: '$book.author',
-        bookDiscription: '$book.discription',
-        bookCover: '$book.image',
-
-        userName: '$user.name'
+        title: '$book.title',
+        author: '$book.author',
+        discription: '$book.discription',
+        image: '$book.image',
+        owner: '$user.name'
       }
     }
   ]).exec((err, results) => {
@@ -74,9 +81,9 @@ export const getRequestedMatch = async (req, res, next) => {
       next(error)
     } else {
       if (!results)
-        res.status(404).json({ message: 'This matched does not exit' })
+        return res.status(404).json({ message: 'This matched does not exit' })
 
-      res.status(200).json(results)
+      return res.status(200).json(results)
     }
   })
 }

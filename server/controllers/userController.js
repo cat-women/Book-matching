@@ -16,7 +16,7 @@ export const signin = async (req, res, next) => {
       expiresIn: '1h'
     })
 
-    return res.status(200).json({ result: oldUser, token })
+    return res.status(200).json({ user: { name: oldUser.name, id: oldUser._id, userType: oldUser.userType, token: token } })
   } catch (error) {
     res.status(500).json({ msg: `Somethin wen wrong ${error.message}` })
   }

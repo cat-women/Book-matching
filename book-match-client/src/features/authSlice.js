@@ -24,6 +24,7 @@ const authSlice = createSlice({
                     state.error = null;
                })
                .addCase(loginAsync.fulfilled, (state, action) => {
+                    console.log("what is here",action.payload)
                     state.loading = false;
                     state.isAuthenticated = true;
                     state.user = action.payload;

@@ -21,12 +21,12 @@ export const getAllBooksAsync = createAsyncThunk('books/getAllBooks', async (_, 
   }
 });
 
-export const getBookByIdAsync = createAsyncThunk('books/getBookById', async (bookId, thunkAPI) => {
+export const getMyBook = createAsyncThunk('books/myBook', async (userId, thunkAPI) => {
   try {
-    const response = await axios.get(`books/${bookId}`);
+    const response = await axios.get(`books/${userId}`);
     return response.data;
   } catch (error) {
-    console.error(`Error getting book by ID (${bookId}):`, error);
+    console.error(`Error getting book by ID (${userId}):`, error);
     thunkAPI.rejectWithValue(error);
   }
 });

@@ -1,6 +1,6 @@
 
 import { createSlice } from '@reduxjs/toolkit';
-import { addBookAsync, getAllBooksAsync, getBookByIdAsync } from './services/book';
+import { addBookAsync, getAllBooksAsync, getMyBook } from './services/book';
 
 const bookSlice = createSlice({
      name: 'books',
@@ -39,15 +39,15 @@ const bookSlice = createSlice({
                     state.loading = false;
                     state.error = action.error.message;
                })
-               .addCase(getBookByIdAsync.pending, (state) => {
+               .addCase(getMyBook.pending, (state) => {
                     state.loading = true;
                     state.error = null;
                })
-               .addCase(getBookByIdAsync.fulfilled, (state, action) => {
+               .addCase(getMyBook.fulfilled, (state, action) => {
                     state.loading = false;
                     state.selectedBook = action.payload;
                })
-               .addCase(getBookByIdAsync.rejected, (state, action) => {
+               .addCase(getMyBook.rejected, (state, action) => {
                     state.loading = false;
                     state.error = action.error.message;
                });

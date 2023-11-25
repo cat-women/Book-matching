@@ -1,2 +1,5 @@
+book-match-client/node_modules/
+
 ./server/.env
 .vscode/
+
